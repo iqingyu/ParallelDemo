@@ -11,18 +11,18 @@ namespace ParallelDemo.Demo
     public abstract class AbstractClass
     {
         protected static string TXT_NAME = "txtTip";
-        protected Control control;
+        protected IView view;
 
-        public AbstractClass(Control control)
+        public AbstractClass(IView view)
         {
-            this.control = control;
+            this.view = view;
         }
 
         protected void SetTip(string tip)
         {
-            this.control.Dispatcher.Invoke(() =>
+            this.view.DispatcherAction(() =>
             {
-                TextBox txtTip = this.control.FindName(TXT_NAME) as TextBox;
+                TextBox txtTip = this.view.GetObjectByName(TXT_NAME) as TextBox;
                 txtTip.SetTip(tip);
             });
         }

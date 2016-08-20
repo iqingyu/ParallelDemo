@@ -17,7 +17,7 @@ namespace ParallelDemo.Demo
         private AutoResetEvent waitObject;
 
 
-        public ThreadPoolClass(Control control) : base(control)
+        public ThreadPoolClass(IView view) : base(view)
         {
             this.waitObject = new AutoResetEvent(false);
         }

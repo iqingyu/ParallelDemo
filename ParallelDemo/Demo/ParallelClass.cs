@@ -10,7 +10,7 @@ namespace ParallelDemo.Demo
 {
     public class ParallelClass : AbstractClass
     {
-        public ParallelClass(Control control) : base(control)
+        public ParallelClass(IView view) : base(view)
         {
         }
 

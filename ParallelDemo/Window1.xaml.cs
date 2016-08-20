@@ -20,7 +20,7 @@ namespace ParallelDemo
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class Window1 : Window
+    public partial class Window1 : Window, IView
     {
         private ThreadPoolClass threadPoolClass;
 
@@ -28,11 +28,22 @@ namespace ParallelDemo
 
         private ParallelClass parallelClass;
 
+        private PLinqClass plinqClass;
+
+
         public ButtonClickCommand ButtonClickCommand
         {
             get
             {
                 return new ButtonClickCommand(ButtonClick);
+            }
+        }
+
+        public Control Control
+        {
+            get
+            {
+                return this;
             }
         }
 
@@ -44,6 +55,7 @@ namespace ParallelDemo
             this.threadPoolClass = new ThreadPoolClass(this);
             this.taskClass = new TaskClass(this);
             this.parallelClass = new Demo.ParallelClass(this);
+            this.plinqClass = new PLinqClass(this);
 
             this.Init();
         }
@@ -193,7 +205,15 @@ namespace ParallelDemo
 
         #endregion
 
+        #region PLinq
 
+        [Tag("PLinq:Linq的并行版本")]
+        private void Demo15()
+        {
+            this.plinqClass.Demo1();
+        }
+
+        #endregion
 
         private void Init()
         {

@@ -1,0 +1,321 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using ParallelDemo.Demo;
+
+namespace ParallelDemo
+{
+    /// <summary>
+    /// MainWindow.xaml 的交互逻辑
+    /// </summary>
+    public partial class Window1 : Window
+    {
+        private ThreadPoolClass threadPoolClass;
+
+        private TaskClass taskClass;
+
+        private ParallelClass parallelClass;
+
+        public ButtonClickCommand ButtonClickCommand
+        {
+            get
+            {
+                return new ButtonClickCommand(ButtonClick);
+            }
+        }
+
+        public Window1()
+        {
+            InitializeComponent();
+
+            this.DataContext = this;
+            this.threadPoolClass = new ThreadPoolClass(this);
+            this.taskClass = new TaskClass(this);
+            this.parallelClass = new Demo.ParallelClass(this);
+
+            this.Init();
+        }
+
+
+        #region ThreadPool
+
+        [Tag("ThreadPool第一种应用场景")]
+        private void Demo1()
+        {
+            this.threadPoolClass.Demo1();
+        }
+
+
+        [Tag("ThreadPool第二种应用场景")]
+        private void Demo2()
+        {
+            this.threadPoolClass.Demo2();
+        }
+
+        #endregion
+
+
+        #region Delegate
+
+        [Tag("Delegate.BeginInvoke")]
+        private void Demo3()
+        {
+            this.txtTip.SetTip("UI, Id:" + Thread.CurrentThread.ManagedThreadId);
+
+            Action action = new Action(this.DelegateTest);
+            action.BeginInvoke(null, null);
+            action.BeginInvoke(null, null);
+        }
+
+        private void DelegateTest()
+        {
+            int id = Thread.CurrentThread.ManagedThreadId;
+
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtTip.SetTip("BeginInvoke, Id:" + id);
+            });
+        }
+
+
+        [Tag("Delegate.BeginInvoke带有参数和返回值")]
+        private void Demo4()
+        {
+            Func<string, string> func = new Func<string, string>(this.DelegateTest2);
+
+            this.txtTip.SetTip(" 输入参数 123 ");
+
+            func.BeginInvoke(" 123 ", new AsyncCallback((System.IAsyncResult result) =>
+            {
+                Func<string, string> tmp = result.AsyncState as Func<string, string>;
+                if (tmp != null)
+                {
+                    string returnResult = tmp.EndInvoke(result);
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.txtTip.SetTip(" 函数回调 结果 : " + returnResult);
+                    });
+                }
+            }), func);
+
+        }
+        private string DelegateTest2(string args)
+        {
+            return args + " : Return args";
+        }
+
+        #endregion
+
+
+        #region Task
+
+        [Tag("Task.NET 4.0 中提倡的方式")]
+        private void Demo5()
+        {
+            taskClass.Demo1();
+        }
+
+
+
+        [Tag("Task初始化任务但并不计划执行")]
+        private void Demo6()
+        {
+            this.taskClass.Demo2();
+        }
+
+
+        [Tag("Task.NET 4.5 中的简易方式")]
+        private void Demo7()
+        {
+            this.taskClass.Demo3();
+        }
+
+        #endregion
+
+
+        #region Parallel
+
+        [Tag("Parallel.Invoke并行多个独立的Action")]
+        private void Demo8()
+        {
+            this.parallelClass.Demo1();
+        }
+
+        [Tag("Parallel简单的For并行")]
+        private void Demo9()
+        {
+            this.parallelClass.Demo2();
+        }
+
+        [Tag("中断Parallel.For并行")]
+        private void Demo10()
+        {
+            this.parallelClass.Demo3();
+        }
+
+        [Tag("终止Parallel.For并行")]
+        private void Demo11()
+        {
+            this.parallelClass.Demo4();
+        }
+
+        [Tag("Parallel.For并行中的数据聚合")]
+        private void Demo12()
+        {
+            this.parallelClass.Demo5();
+        }
+
+
+        [Tag("Parallel.ForEach并行")]
+        private void Demo13()
+        {
+            this.parallelClass.Demo6();
+        }
+
+        [Tag("Parallel.ForEach中的索引，中断、终止操作")]
+        private void Demo14()
+        {
+            this.parallelClass.Demo7();
+        }
+
+        #endregion
+
+
+
+        private void Init()
+        {
+            var tags = this.GetType()
+                .GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .AsParallel().Select((m) =>
+                {
+                    object[] attribute = m.GetCustomAttributes(typeof(TagAttribute), false);
+                    if (attribute.Length == 1)
+                    {
+                        var args = m.GetParameters();
+
+                        if (args.Length == 0 && m.ReturnType == typeof(void))
+                            return (attribute[0] as TagAttribute).Tag;
+                    }
+
+                    return string.Empty;
+                }).Where(tag => !string.IsNullOrEmpty(tag));
+
+
+            foreach (var item in tags)
+            {
+                Button btn = new Button() { Tag = item, Content = item, Margin = new Thickness(2) };
+
+                btn.SetBinding(Button.CommandProperty, new Binding(nameof(this.ButtonClickCommand)) { Source = this });
+
+                btn.SetBinding(Button.CommandParameterProperty, new Binding(nameof(Button.Tag)) { Source = btn });
+
+                this.panel.Children.Add(btn);
+            }
+
+        }
+
+        private void ButtonClick(object tag)
+        {
+            string tagString = tag as string;
+            if (string.IsNullOrEmpty(tagString))
+                return;
+
+            var methods = this.GetType().GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic
+                | System.Reflection.BindingFlags.Instance).AsParallel().Where((p) =>
+             {
+                 object[] attribute = p.GetCustomAttributes(typeof(TagAttribute), false);
+                 if (attribute.Length == 1)
+                 {
+                     if ((attribute[0] as TagAttribute).Tag == tagString)
+                     {
+                         var args = p.GetParameters();
+
+                         if (args.Length == 0 && p.ReturnType == typeof(void))
+                             return true;
+                     }
+                 }
+
+                 return false;
+             });
+
+            this.txtTip.SetTip("");
+            this.txtTip.SetTip("========" + tagString + "========");
+            foreach (var item in methods)
+            {
+                item.Invoke(this, null);
+            }
+        }
+
+    }
+
+
+    public static class TextBoxExtension
+    {
+        public static void SetTip(this TextBox txtTip, string tip)
+        {
+            if (txtTip != null)
+            {
+                if (txtTip.LineCount > 30 && string.IsNullOrEmpty(tip))
+                    txtTip.Text = string.Empty;
+
+                txtTip.AppendText(string.Format("{0} {1}\r\n", DateTime.Now.ToString("HH:mm:ss"), tip));
+            }
+        }
+    }
+
+    public class ButtonClickCommand : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        private Action<object> action;
+
+        public ButtonClickCommand(Action<object> action)
+        {
+            this.action = action;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            if (this.action != null)
+            {
+                this.action(parameter);
+            }
+        }
+    }
+
+
+    [System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    sealed class TagAttribute : Attribute
+    {
+        private readonly string tag;
+
+        public TagAttribute(string tag)
+        {
+            this.tag = tag;
+        }
+
+        public string Tag
+        {
+            get { return tag; }
+        }
+    }
+
+}

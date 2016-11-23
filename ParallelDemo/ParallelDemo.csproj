@@ -63,6 +63,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Demo\AbstractClass.cs" />
+    <Compile Include="Demo\AwaitAsyncClass.cs" />
     <Compile Include="IViewExtension.cs" />
     <Compile Include="Demo\ParallelClass.cs" />
     <Compile Include="Demo\PLinqClass.cs" />

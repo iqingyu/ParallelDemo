@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ParallelDemo.Demo;
+using System.Net;
 
 namespace ParallelDemo
 {
@@ -30,6 +31,7 @@ namespace ParallelDemo
 
         private PLinqClass plinqClass;
 
+        private AwaitAsyncClass awaitClass;
 
         public ButtonClickCommand ButtonClickCommand
         {
@@ -56,6 +58,7 @@ namespace ParallelDemo
             this.taskClass = new TaskClass(this);
             this.parallelClass = new Demo.ParallelClass(this);
             this.plinqClass = new PLinqClass(this);
+            this.awaitClass = new Demo.AwaitAsyncClass(this);
 
             this.Init();
         }
@@ -79,7 +82,7 @@ namespace ParallelDemo
         #endregion
 
 
-        #region Delegate
+        #region Delegate 即 APM系列
 
         [Tag("Delegate.BeginInvoke")]
         private void Demo3()
@@ -205,15 +208,61 @@ namespace ParallelDemo
 
         #endregion
 
+
+        #region EPM系列
+
+        [Tag("EPM系列")]
+        private void Demo15()
+        {
+            var address = "http://www.cnblogs.com/08shiyan/";
+
+            WebClient client = new WebClient();
+            Uri uri = new Uri(address);
+
+            client.DownloadStringCompleted += new DownloadStringCompletedEventHandler((object sender, DownloadStringCompletedEventArgs e) =>
+            {
+                this.txtTip.SetTip("下载完成");
+            });
+
+            client.DownloadStringAsync(uri);
+
+            this.txtTip.SetTip("开始异步下载数据");
+        }
+
+        #endregion
+
+
         #region PLinq
 
         [Tag("PLinq:Linq的并行版本")]
-        private void Demo15()
+        private void Demo16()
         {
             this.plinqClass.Demo1();
         }
 
+        [Tag("PLinq:AsOrdered")]
+        private void Demo17()
+        {
+            this.plinqClass.Demo2();
+        }
+
         #endregion
+
+
+        #region await async
+
+        [Tag("await async:第一个demo")]
+        private async void Demo20()
+        {
+            var t = this.awaitClass.AsyncMethod();
+
+            this.txtTip.SetTip($"ManagedThreadId - 3 - :{Thread.CurrentThread.ManagedThreadId}");
+
+            await t;
+        }
+
+        #endregion
+
 
         private void Init()
         {

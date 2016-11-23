@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:ParallelDemo"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="Window1"
+        WindowState="Maximized"
         Width="525"
         Height="350"
         mc:Ignorable="d">

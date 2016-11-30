@@ -254,12 +254,34 @@ namespace ParallelDemo
         [Tag("await async:第一个demo")]
         private async void Demo20()
         {
-            var t = this.awaitClass.AsyncMethod();
+            var t = this.awaitClass.MethodAsync();
 
             this.txtTip.SetTip($"ManagedThreadId - 3 - :{Thread.CurrentThread.ManagedThreadId}");
 
             await t;
         }
+         
+
+        [Tag("For await")]
+        private async void Demo21()
+        {
+            this.awaitClass.SetThreadTip("For await-1", "");
+
+            await this.awaitClass.ForMethodAsync();
+
+            this.awaitClass.SetThreadTip("For await-2", "");
+        }
+
+        [Tag("DeadLock")]
+        private async void Demo22()
+        {
+            this.awaitClass.SetThreadTip("DeadLock-1", "");
+
+            await this.awaitClass.DeadLockDemoAsync();
+
+            this.awaitClass.SetThreadTip("DeadLock-2", "");
+        }
+
 
         #endregion
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ParallelDemo;
+using System.Threading;
 
 namespace ParallelDemo.Demo
 {
@@ -25,6 +26,11 @@ namespace ParallelDemo.Demo
                 TextBox txtTip = this.view.GetObjectByName(TXT_NAME) as TextBox;
                 txtTip.SetTip(tip);
             });
+        }
+
+        public void SetThreadTip(string tag, string args)
+        {
+            SetTip($"Tag:{tag},  Args:{args},  ManagedThreadId:{Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }

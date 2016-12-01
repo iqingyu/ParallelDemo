@@ -20,12 +20,12 @@ namespace ParallelDemo.Demo
         /// <returns></returns>
         public async Task MethodAsync()
         {
-            SetTip($"ManagedThreadId - 1 - :{Thread.CurrentThread.ManagedThreadId}");
+            PrintInfo($"ManagedThreadId - 1 - :{Thread.CurrentThread.ManagedThreadId}");
 
             // 休眠
             await Task.Delay(TimeSpan.FromMilliseconds(100));
 
-            SetTip($"ManagedThreadId - 2 - :{Thread.CurrentThread.ManagedThreadId}");
+            PrintInfo($"ManagedThreadId - 2 - :{Thread.CurrentThread.ManagedThreadId}");
         }
 
         /// <summary>
@@ -36,30 +36,15 @@ namespace ParallelDemo.Demo
         {
             // 休眠
             // await Task.Delay(TimeSpan.FromMilliseconds(100)).ConfigureAwait(false);
-            await Task.Delay(TimeSpan.FromMilliseconds(100));
-            
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < 5; i++)
             {
-                //await MethodCallAsync(i.ToString(), 100);
-                await Task.Delay(100);
-                SetThreadTip("ForMethodAsync", i.ToString());
-            }
-        }
-
-
-        private async Task MethodCallAsync(string args, int sleep)
-        {
-            SetThreadTip("MethodCallAsync - 1", args);
-
-            // 休眠
-            await Task.Delay(TimeSpan.FromMilliseconds(sleep));
-
-            SetThreadTip("MethodCallAsync - 2", args);
-
-            // 休眠
-            await Task.Delay(TimeSpan.FromMilliseconds(sleep)); //.ConfigureAwait(false);
-
-            SetThreadTip("MethodCallAsync - 3", args);
+                await Task.Run(() =>
+                {
+                    // 打印线程id
+                    PrintThreadInfo("ForMethodAsync", i.ToString());
+                });
+            }            
         }
 
 
@@ -75,7 +60,7 @@ namespace ParallelDemo.Demo
 
             DeadlockDemo.Test();
         }
-        
+
     }
 
     /// <summary>

@@ -33,15 +33,15 @@ namespace ParallelDemo.Demo
 
             Task.Factory.StartNew(() =>
             {
-                base.SetTip("Task.Factory.StartNew(一个参数)");
+                base.PrintInfo("Task.Factory.StartNew(一个参数)");
             }).ContinueWith((t) =>
             {
-                base.SetTip(t.Id.ToString());
-                base.SetTip(t.CreationOptions.ToString());
+                base.PrintInfo(t.Id.ToString());
+                base.PrintInfo(t.CreationOptions.ToString());
             }).ContinueWith((t) =>
             {
-                base.SetTip(t.Id.ToString());
-                base.SetTip(t.CreationOptions.ToString());
+                base.PrintInfo(t.Id.ToString());
+                base.PrintInfo(t.CreationOptions.ToString());
             });
 
             // Task.Factory.StartNew 提供了高达16个的重载函数。
@@ -75,30 +75,30 @@ namespace ParallelDemo.Demo
             // public Task(Func<object, TResult> function, object state, CancellationToken cancellationToken, TaskCreationOptions creationOptions);
             // 其参数和 Task.Factory.StartNew 相比、 少了TaskScheduler。在性能方面MSDN提示后者会更好。
 
-            base.SetTip("初始化任务");
+            base.PrintInfo("初始化任务");
             Task task = new Task(() =>
             {
-                base.SetTip("被计划的任务开始执行");
+                base.PrintInfo("被计划的任务开始执行");
 
-                base.SetTip("任务休眠5秒");
+                base.PrintInfo("任务休眠5秒");
                 Thread.Sleep(5000);
 
-                base.SetTip("任务执行完毕");
+                base.PrintInfo("任务执行完毕");
             });
 
             // 为了保证能实时更新UI、看到代码执行效果、故而将代码异步执行
             Task.Factory.StartNew(() =>
             {
-                base.SetTip("休眠两秒");
+                base.PrintInfo("休眠两秒");
                 Thread.Sleep(2000);
 
-                base.SetTip("将任务列入执行计划");
+                base.PrintInfo("将任务列入执行计划");
                 task.Start();
 
 
-                base.SetTip("等待Task执行完毕");
+                base.PrintInfo("等待Task执行完毕");
                 task.Wait();// Wait方法 会等待Task执行完毕
-                base.SetTip("Task执行完毕");
+                base.PrintInfo("Task执行完毕");
             });
 
             // 另外再强调一点：Task.Start()， 只是将任务列入执行计划，至于任务什么时候去执行则取决于线程池中什么时候有可用线程。
@@ -112,15 +112,15 @@ namespace ParallelDemo.Demo
         {
             Task.Run(() =>
             {
-                SetTip("简洁的代码");
+                PrintInfo("简洁的代码");
             });
 
 
             Task.Run(() =>
             {
-                SetTip("验证 CreationOptions 属性");
+                PrintInfo("验证 CreationOptions 属性");
             }).ContinueWith((t)=> {
-                SetTip("CreationOptions:" + t.CreationOptions.ToString());                
+                PrintInfo("CreationOptions:" + t.CreationOptions.ToString());                
             });
         }
 

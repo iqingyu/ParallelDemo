@@ -87,7 +87,7 @@ namespace ParallelDemo
         [Tag("Delegate.BeginInvoke")]
         private void Demo3()
         {
-            this.txtTip.SetTip("UI, Id:" + Thread.CurrentThread.ManagedThreadId);
+            this.txtTip.PrintInfo("UI, Id:" + Thread.CurrentThread.ManagedThreadId);
 
             Action action = new Action(this.DelegateTest);
             action.BeginInvoke(null, null);
@@ -100,7 +100,7 @@ namespace ParallelDemo
 
             this.Dispatcher.Invoke(() =>
             {
-                this.txtTip.SetTip("BeginInvoke, Id:" + id);
+                this.txtTip.PrintInfo("BeginInvoke, Id:" + id);
             });
         }
 
@@ -110,7 +110,7 @@ namespace ParallelDemo
         {
             Func<string, string> func = new Func<string, string>(this.DelegateTest2);
 
-            this.txtTip.SetTip(" 输入参数 123 ");
+            this.txtTip.PrintInfo(" 输入参数 123 ");
 
             func.BeginInvoke(" 123 ", new AsyncCallback((System.IAsyncResult result) =>
             {
@@ -121,7 +121,7 @@ namespace ParallelDemo
 
                     this.Dispatcher.Invoke(() =>
                     {
-                        this.txtTip.SetTip(" 函数回调 结果 : " + returnResult);
+                        this.txtTip.PrintInfo(" 函数回调 结果 : " + returnResult);
                     });
                 }
             }), func);
@@ -221,12 +221,12 @@ namespace ParallelDemo
 
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler((object sender, DownloadStringCompletedEventArgs e) =>
             {
-                this.txtTip.SetTip("下载完成");
+                this.txtTip.PrintInfo("下载完成");
             });
 
             client.DownloadStringAsync(uri);
 
-            this.txtTip.SetTip("开始异步下载数据");
+            this.txtTip.PrintInfo("开始异步下载数据");
         }
 
         #endregion
@@ -256,7 +256,7 @@ namespace ParallelDemo
         {
             var t = this.awaitClass.MethodAsync();
 
-            this.txtTip.SetTip($"ManagedThreadId - 3 - :{Thread.CurrentThread.ManagedThreadId}");
+            this.txtTip.PrintInfo($"ManagedThreadId - 3 - :{Thread.CurrentThread.ManagedThreadId}");
 
             await t;
         }
@@ -265,21 +265,21 @@ namespace ParallelDemo
         [Tag("For await")]
         private async void Demo21()
         {
-            this.awaitClass.SetThreadTip("For await-1", "");
+            this.awaitClass.PrintThreadInfo("For await-1", "");
 
             await this.awaitClass.ForMethodAsync();
 
-            this.awaitClass.SetThreadTip("For await-2", "");
+            this.awaitClass.PrintThreadInfo("For await-2", "");
         }
 
         [Tag("DeadLock")]
         private async void Demo22()
         {
-            this.awaitClass.SetThreadTip("DeadLock-1", "");
+            this.awaitClass.PrintThreadInfo("DeadLock-1", "");
 
             await this.awaitClass.DeadLockDemoAsync();
 
-            this.awaitClass.SetThreadTip("DeadLock-2", "");
+            this.awaitClass.PrintThreadInfo("DeadLock-2", "");
         }
 
 
@@ -342,8 +342,8 @@ namespace ParallelDemo
                  return false;
              });
 
-            this.txtTip.SetTip("");
-            this.txtTip.SetTip("========" + tagString + "========");
+            this.txtTip.PrintInfo("");
+            this.txtTip.PrintInfo("========" + tagString + "========");
             foreach (var item in methods)
             {
                 item.Invoke(this, null);
@@ -352,10 +352,9 @@ namespace ParallelDemo
 
     }
 
-
     public static class TextBoxExtension
     {
-        public static void SetTip(this TextBox txtTip, string tip)
+        public static void PrintInfo(this TextBox txtTip, string tip)
         {
             if (txtTip != null)
             {

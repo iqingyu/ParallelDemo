@@ -19,18 +19,18 @@ namespace ParallelDemo.Demo
             this.view = view;
         }
 
-        protected void SetTip(string tip)
+        protected void PrintInfo(string tip)
         {
             this.view.DispatcherAction(() =>
             {
                 TextBox txtTip = this.view.GetObjectByName(TXT_NAME) as TextBox;
-                txtTip.SetTip(tip);
+                txtTip.PrintInfo(tip);
             });
         }
 
-        public void SetThreadTip(string tag, string args)
+        public void PrintThreadInfo(string tag, string args)
         {
-            SetTip($"Tag:{tag},  Args:{args},  ManagedThreadId:{Thread.CurrentThread.ManagedThreadId}");
+            PrintInfo($"Tag:{tag},  Args:{args},  ManagedThreadId:{Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }

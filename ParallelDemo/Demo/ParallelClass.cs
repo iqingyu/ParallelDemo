@@ -31,16 +31,16 @@ namespace ParallelDemo.Demo
                     int index = i;
                     actions.Add(new Action(() =>
                     {
-                        SetTip(string.Format("Task{0} 开始", index));
+                        PrintInfo(string.Format("Task{0} 开始", index));
 
-                        SetTip(string.Format("Task{0} 休眠1秒", index));
+                        PrintInfo(string.Format("Task{0} 休眠1秒", index));
                         Thread.Sleep(1000);
 
 
-                        SetTip(string.Format("Task{0} 休眠5秒", index));
+                        PrintInfo(string.Format("Task{0} 休眠5秒", index));
                         Thread.Sleep(5000);
                         
-                        SetTip(string.Format("Task{0} 结束", index));
+                        PrintInfo(string.Format("Task{0} 结束", index));
                     }));
                 }
 
@@ -48,7 +48,7 @@ namespace ParallelDemo.Demo
                 Parallel.Invoke(actions.ToArray());
 
                 // 当上述的5个任务全部执行完毕后，才会执行该代码
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 
@@ -63,15 +63,15 @@ namespace ParallelDemo.Demo
             {
                 Parallel.For(1, 100, (index) =>
                 {
-                    SetTip(string.Format("Index:{0}, 开始执行Task", index));
+                    PrintInfo(string.Format("Index:{0}, 开始执行Task", index));
 
                     Thread.Sleep(1000);
-                    SetTip(string.Format("Index:{0}, 开始休眠Action 1秒", index));
+                    PrintInfo(string.Format("Index:{0}, 开始休眠Action 1秒", index));
 
-                    SetTip(string.Format("Index:{0}, Task执行完毕", index));
+                    PrintInfo(string.Format("Index:{0}, Task执行完毕", index));
                 });
 
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 
@@ -84,15 +84,15 @@ namespace ParallelDemo.Demo
             Task.Run(() =>
             {
                 int breakIndex = new Random().Next(10, 50);
-                SetTip(" BreakIndex : -------------------------" + breakIndex);
+                PrintInfo(" BreakIndex : -------------------------" + breakIndex);
 
                 Parallel.For(1, 100, (index, state) =>
                 {
-                    SetTip(string.Format("Index:{0}, 开始执行Task", index));
+                    PrintInfo(string.Format("Index:{0}, 开始执行Task", index));
 
                     if (breakIndex == index)
                     {
-                        SetTip(string.Format("Index:{0}, ------------------ Break Task", index));
+                        PrintInfo(string.Format("Index:{0}, ------------------ Break Task", index));
                         state.Break();
                         // Break方法执行后、
                         // 大于 当前索引的并且未被安排执行的迭代将被放弃
@@ -101,12 +101,12 @@ namespace ParallelDemo.Demo
                     }
 
                     Thread.Sleep(1000);
-                    SetTip(string.Format("Index:{0}, 休眠Action 1秒", index));
+                    PrintInfo(string.Format("Index:{0}, 休眠Action 1秒", index));
 
-                    SetTip(string.Format("Index:{0}, Task执行完毕", index));
+                    PrintInfo(string.Format("Index:{0}, Task执行完毕", index));
                 });
 
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 
@@ -120,15 +120,15 @@ namespace ParallelDemo.Demo
             Task.Run(() =>
             {
                 int stopIndex = new Random().Next(10, 50);
-                SetTip(" StopIndex : -------------------------" + stopIndex);
+                PrintInfo(" StopIndex : -------------------------" + stopIndex);
 
                 Parallel.For(1, 100, (index, state) =>
                 {
-                    SetTip(string.Format("Index:{0}, 开始执行Task", index));
+                    PrintInfo(string.Format("Index:{0}, 开始执行Task", index));
 
                     if (stopIndex == index)
                     {
-                        SetTip(string.Format("Index:{0}, ------------------ Stop Task", index));
+                        PrintInfo(string.Format("Index:{0}, ------------------ Stop Task", index));
                         state.Stop();
                         // Stop方法执行后
                         // 整个迭代将被放弃
@@ -136,12 +136,12 @@ namespace ParallelDemo.Demo
                     }
 
                     Thread.Sleep(1000);
-                    SetTip(string.Format("Index:{0}, 休眠Action 1秒", index));
+                    PrintInfo(string.Format("Index:{0}, 休眠Action 1秒", index));
 
-                    SetTip(string.Format("Index:{0}, Task执行完毕", index));
+                    PrintInfo(string.Format("Index:{0}, Task执行完毕", index));
                 });
 
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 
@@ -158,12 +158,12 @@ namespace ParallelDemo.Demo
                 Parallel.For<long>(1, 10,
                     () =>
                     {
-                        SetTip("LocalInit");
+                        PrintInfo("LocalInit");
                         return 0;
                     },
                     (index, state, local) =>
                     {
-                        SetTip("Body");
+                        PrintInfo("Body");
                         int result = 1;
                         for (int i = 2; i < index; i++)
                         {
@@ -174,12 +174,12 @@ namespace ParallelDemo.Demo
                     },
                     (x) =>
                     {
-                        SetTip("LocalFinally");
+                        PrintInfo("LocalFinally");
                         Interlocked.Add(ref total, x);
                     });
 
-                SetTip("Total : " + total);
-                SetTip("并行任务执行完毕");
+                PrintInfo("Total : " + total);
+                PrintInfo("并行任务执行完毕");
             });
 
 
@@ -207,17 +207,17 @@ namespace ParallelDemo.Demo
             {
                 Parallel.ForEach<int>(Enumerable.Range(1, 10), (num) =>
                 {
-                    SetTip("Task 开始");
+                    PrintInfo("Task 开始");
 
 
-                    SetTip("Task 休眠" + num + "秒");
+                    PrintInfo("Task 休眠" + num + "秒");
                     Thread.Sleep(TimeSpan.FromSeconds(num));
 
 
-                    SetTip("Task 结束");
+                    PrintInfo("Task 结束");
                 });
 
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 
@@ -232,9 +232,9 @@ namespace ParallelDemo.Demo
                 {
                     // num, 并行数据源中的数据项
                     // state, 
-                    SetTip(" Index : " + index + "         Num: " + num);
+                    PrintInfo(" Index : " + index + "         Num: " + num);
                 });
-                SetTip("并行任务执行完毕");
+                PrintInfo("并行任务执行完毕");
             });
         }
 

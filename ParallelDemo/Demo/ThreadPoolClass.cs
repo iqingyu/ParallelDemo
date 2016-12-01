@@ -36,13 +36,13 @@ namespace ParallelDemo.Demo
             // public delegate void WaitCallback(object state);
 
 
-            base.SetTip(nameof(ThreadPool.QueueUserWorkItem));
+            base.PrintInfo(nameof(ThreadPool.QueueUserWorkItem));
 
             ThreadPool.QueueUserWorkItem((state) =>
             {
-                this.SetTip("等待一秒");
+                this.PrintInfo("等待一秒");
                 Thread.Sleep(1000);
-                this.SetTip("任务执行完毕");
+                this.PrintInfo("任务执行完毕");
             });
         }
 
@@ -69,27 +69,27 @@ namespace ParallelDemo.Demo
 
             // executeOnlyOnce， True 表示只执行一次, False 会一直等到该信号对象被取消注册，否则 只要接到信号或者超时就会触发回调函数。
 
-            base.SetTip(nameof(ThreadPool.RegisterWaitForSingleObject));
+            base.PrintInfo(nameof(ThreadPool.RegisterWaitForSingleObject));
 
             ThreadPool.RegisterWaitForSingleObject(this.waitObject, (state, timeout) =>
             {
-                this.SetTip("++++++等待对象收到信号++++++");
+                this.PrintInfo("++++++等待对象收到信号++++++");
 
             }, null, -1, false);
 
 
             ThreadPool.QueueUserWorkItem((state) =>
             {
-                this.SetTip("等待一秒");
+                this.PrintInfo("等待一秒");
                 Thread.Sleep(1000);
 
-                this.SetTip("等待对象发出信号");
+                this.PrintInfo("等待对象发出信号");
                 this.waitObject.Set();
 
-                this.SetTip("等待5秒");
+                this.PrintInfo("等待5秒");
                 Thread.Sleep(5000);
 
-                this.SetTip("等待对象发出信号");
+                this.PrintInfo("等待对象发出信号");
                 this.waitObject.Set();
 
             });

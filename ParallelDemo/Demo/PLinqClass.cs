@@ -27,23 +27,23 @@ namespace ParallelDemo.Demo
             {
                 var result = Enumerable.Range(1, 10).AsParallel().Where(e =>
                 {
-                    SetTip("开始                      " + e);
+                    PrintInfo("开始                      " + e);
 
-                    SetTip("休眠             " + e);
+                    PrintInfo("休眠             " + e);
                     Thread.Sleep(1000);
 
-                    SetTip("结束  " + e);
+                    PrintInfo("结束  " + e);
                     return e > 5;
                 });
 
-                SetTip("打印结果");
+                PrintInfo("打印结果");
 
                 foreach (var item in result)
                 {
-                    SetTip(item.ToString());
+                    PrintInfo(item.ToString());
                 }
 
-                SetTip("并行查询执行完毕");
+                PrintInfo("并行查询执行完毕");
             });
         }
 
@@ -57,23 +57,23 @@ namespace ParallelDemo.Demo
             {
                 var result = Enumerable.Range(1, 10).AsParallel().AsOrdered().Where(e =>
                 {
-                    SetTip("开始                      " + e);
+                    PrintInfo("开始                      " + e);
 
-                    SetTip("休眠             " + e);
+                    PrintInfo("休眠             " + e);
                     Thread.Sleep(1000);
 
-                    SetTip("结束  " + e);
+                    PrintInfo("结束  " + e);
                     return e > 5;
                 });
 
-                SetTip("打印结果");
+                PrintInfo("打印结果");
 
                 foreach (var item in result)
                 {
-                    SetTip(item.ToString());
+                    PrintInfo(item.ToString());
                 }
 
-                SetTip("并行查询执行完毕");
+                PrintInfo("并行查询执行完毕");
             });
         }
 

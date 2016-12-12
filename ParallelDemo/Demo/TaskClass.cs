@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -119,12 +120,66 @@ namespace ParallelDemo.Demo
             Task.Run(() =>
             {
                 PrintInfo("验证 CreationOptions 属性");
-            }).ContinueWith((t)=> {
-                PrintInfo("CreationOptions:" + t.CreationOptions.ToString());                
+            }).ContinueWith((t) =>
+            {
+                PrintInfo("CreationOptions:" + t.CreationOptions.ToString());
             });
         }
 
 
+        /// <summary>
+        /// 封装APM
+        /// </summary>
+        public void Demo4()
+        {
+            var response = GetResponse("http://www.cnblogs.com/08shiyan");
+
+            // ... 
+        }
+
+        private Task<WebResponse> GetResponse(string url)
+        {
+            var request = WebRequest.CreateHttp(url);
+            request.Method = "GET";
+            return Task.Factory.FromAsync<WebResponse>(request.BeginGetResponse, request.EndGetResponse, null);
+        }
+
+
+        /// <summary>
+        /// 封装EAP
+        /// </summary>
+        public void Demo5()
+        {
+            var result = GetResult("http://www.cnblogs.com/08shiyan");
+
+            // ...
+        }
+
+        private Task<string> GetResult(string url)
+        {
+            TaskCompletionSource<string> source = new TaskCompletionSource<string>();
+
+            WebClient webClient = new WebClient();
+            webClient.DownloadStringCompleted += (sender, args) =>
+            {
+                if (args.Cancelled)
+                {
+                    source.SetCanceled();
+                    return;
+                }
+                if (args.Error != null)
+                {
+                    source.SetException(args.Error);
+                    return;
+                }
+                source.SetResult(args.Result);
+            };
+            webClient.DownloadStringAsync(new Uri(url), null);
+
+            return source.Task;
+        }
+
+        
 
     }
 }

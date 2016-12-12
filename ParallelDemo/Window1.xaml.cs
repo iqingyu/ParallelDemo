@@ -260,7 +260,7 @@ namespace ParallelDemo
 
             await t;
         }
-         
+
 
         [Tag("For await")]
         private async void Demo21()
@@ -282,6 +282,27 @@ namespace ParallelDemo
             this.awaitClass.PrintThreadInfo("DeadLock-2", "");
         }
 
+
+        #endregion
+
+
+        #region 封装 APM  和  EAP
+
+        /// <summary>
+        /// APM
+        /// </summary>
+        private void Demo23()
+        {
+            this.taskClass.Demo4();
+        }
+
+        /// <summary>
+        /// EAP
+        /// </summary>
+        private void Demo24()
+        {
+            this.taskClass.Demo5();
+        }
 
         #endregion
 

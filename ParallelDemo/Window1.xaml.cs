@@ -33,6 +33,8 @@ namespace ParallelDemo
 
         private AwaitAsyncClass awaitClass;
 
+        private AtomicityClass atomicityClass;
+
         public ButtonClickCommand ButtonClickCommand
         {
             get
@@ -54,11 +56,13 @@ namespace ParallelDemo
             InitializeComponent();
 
             this.DataContext = this;
+
             this.threadPoolClass = new ThreadPoolClass(this);
             this.taskClass = new TaskClass(this);
             this.parallelClass = new Demo.ParallelClass(this);
             this.plinqClass = new PLinqClass(this);
             this.awaitClass = new Demo.AwaitAsyncClass(this);
+            this.atomicityClass = new Demo.AtomicityClass(this);
 
             this.Init();
         }
@@ -270,6 +274,8 @@ namespace ParallelDemo
             await this.awaitClass.ForMethodAsync();
 
             this.awaitClass.PrintThreadInfo("For await-2", "");
+
+            new List<string>();
         }
 
         [Tag("DeadLock")]
@@ -307,11 +313,28 @@ namespace ParallelDemo
         #endregion
 
 
+        #region 原子性操作
+
+        /// <summary>
+        /// 看似安全的操作实际不安全
+        /// </summary>
+        [Tag("Long-原子操作测试")]
+        private void Demo25()
+        {
+            this.atomicityClass.TestAtomicity();
+        }
+
+        #endregion
+
+
+
+
+
         private void Init()
         {
             var tags = this.GetType()
                 .GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .AsParallel().Select((m) =>
+                /*.AsParallel()*/.Select((m) =>
                 {
                     object[] attribute = m.GetCustomAttributes(typeof(TagAttribute), false);
                     if (attribute.Length == 1)

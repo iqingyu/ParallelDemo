@@ -28,6 +28,15 @@ namespace ParallelDemo.Demo
             });
         }
 
+        protected void PrintExInfo(Exception ex)
+        {
+            this.view.DispatcherAction(() =>
+            {
+                TextBox txtTip = this.view.GetObjectByName(TXT_NAME) as TextBox;
+                txtTip.PrintInfo($"Exception.Message: {ex.Message}");
+            });
+        }
+
         public void PrintThreadInfo(string tag, string args)
         {
             PrintInfo($"Tag:{tag},  Args:{args},  ManagedThreadId:{Thread.CurrentThread.ManagedThreadId}");

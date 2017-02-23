@@ -67,6 +67,7 @@
     <Compile Include="Demo\AtomicityClass.cs" />
     <Compile Include="Demo\AwaitAsyncClass.cs" />
     <Compile Include="Demo\LockMonitorClass.cs" />
+    <Compile Include="Demo\ReaderWriterLockSlimClass.cs" />
     <Compile Include="IViewExtension.cs" />
     <Compile Include="Demo\ParallelClass.cs" />
     <Compile Include="Demo\PLinqClass.cs" />

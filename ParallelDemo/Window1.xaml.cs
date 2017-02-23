@@ -35,6 +35,9 @@ namespace ParallelDemo
 
         private AtomicityClass atomicityClass;
 
+        private ReaderWriterLockSlimClass readerWriterClass;
+
+
         public ButtonClickCommand ButtonClickCommand
         {
             get
@@ -63,6 +66,7 @@ namespace ParallelDemo
             this.plinqClass = new PLinqClass(this);
             this.awaitClass = new Demo.AwaitAsyncClass(this);
             this.atomicityClass = new Demo.AtomicityClass(this);
+            this.readerWriterClass = new Demo.ReaderWriterLockSlimClass(this);
 
             this.Init();
         }
@@ -327,7 +331,27 @@ namespace ParallelDemo
         #endregion
 
 
+        #region 读写锁
 
+        /// <summary>
+        /// 读写锁
+        /// </summary>
+        [Tag("读写锁-ReaderWriterLockSlim")]
+        private void Demo26()
+        {
+            this.readerWriterClass.Demo1();
+        }
+
+        /// <summary>
+        /// 读写锁线程关联性
+        /// </summary>
+        [Tag("读写锁-测试重复进入不同锁模式")]
+        private void Demo27()
+        {
+            this.readerWriterClass.Demo2();
+        }
+
+        #endregion
 
 
         private void Init()

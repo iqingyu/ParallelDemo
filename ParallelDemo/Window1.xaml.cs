@@ -37,6 +37,8 @@ namespace ParallelDemo
 
         private ReaderWriterLockSlimClass readerWriterClass;
 
+        private InterlockedSpinLockClass spinLockClass;
+
 
         public ButtonClickCommand ButtonClickCommand
         {
@@ -67,6 +69,7 @@ namespace ParallelDemo
             this.awaitClass = new Demo.AwaitAsyncClass(this);
             this.atomicityClass = new Demo.AtomicityClass(this);
             this.readerWriterClass = new Demo.ReaderWriterLockSlimClass(this);
+            this.spinLockClass = new Demo.InterlockedSpinLockClass(this);
 
             this.Init();
         }
@@ -353,6 +356,28 @@ namespace ParallelDemo
 
         #endregion
 
+
+        #region 原子操作和自旋锁
+
+        [Tag("原子操作-计数")]
+        private void Demo28()
+        {
+            this.spinLockClass.Demo1();
+        }
+
+        [Tag("原子操作-单例模式")]
+        private void Demo29()
+        {
+            this.spinLockClass.Demo2();
+        }
+
+
+        [Tag("自旋锁")]
+        private void Demo30()
+        {
+            this.spinLockClass.Demo3();
+        }
+        #endregion
 
         private void Init()
         {

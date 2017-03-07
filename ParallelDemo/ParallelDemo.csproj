@@ -69,6 +69,7 @@
     <Compile Include="Demo\InterlockedSpinLockClass.cs" />
     <Compile Include="Demo\LockMonitorClass.cs" />
     <Compile Include="Demo\ReaderWriterLockSlimClass.cs" />
+    <Compile Include="Demo\VariableCapturingClass.cs" />
     <Compile Include="IViewExtension.cs" />
     <Compile Include="Demo\ParallelClass.cs" />
     <Compile Include="Demo\PLinqClass.cs" />

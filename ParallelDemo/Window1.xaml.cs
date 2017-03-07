@@ -39,6 +39,9 @@ namespace ParallelDemo
 
         private InterlockedSpinLockClass spinLockClass;
 
+        private VariableCapturingClass variableClass;
+
+
 
         public ButtonClickCommand ButtonClickCommand
         {
@@ -70,6 +73,8 @@ namespace ParallelDemo
             this.atomicityClass = new Demo.AtomicityClass(this);
             this.readerWriterClass = new Demo.ReaderWriterLockSlimClass(this);
             this.spinLockClass = new Demo.InterlockedSpinLockClass(this);
+            this.variableClass = new Demo.VariableCapturingClass(this);
+
 
             this.Init();
         }
@@ -378,6 +383,37 @@ namespace ParallelDemo
             this.spinLockClass.Demo3();
         }
         #endregion
+
+
+        #region 闭包
+
+        [Tag("闭包-1")]
+        private void Demo31()
+        {
+            this.variableClass.Demo1();
+        }
+
+        [Tag("闭包-2-窥探闭包的本质")]
+        private void Demo32()
+        {
+            this.variableClass.Demo2();
+        }
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void Init()
         {

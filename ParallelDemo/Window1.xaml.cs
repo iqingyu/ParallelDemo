@@ -23,6 +23,8 @@ namespace ParallelDemo
     /// </summary>
     public partial class Window1 : Window, IView
     {
+        #region 字段
+
         private ThreadPoolClass threadPoolClass;
 
         private TaskClass taskClass;
@@ -41,7 +43,9 @@ namespace ParallelDemo
 
         private VariableCapturingClass variableClass;
 
+        private ConcurrentCollectionClass concurrentClass;
 
+        #endregion
 
         public ButtonClickCommand ButtonClickCommand
         {
@@ -74,6 +78,7 @@ namespace ParallelDemo
             this.readerWriterClass = new Demo.ReaderWriterLockSlimClass(this);
             this.spinLockClass = new Demo.InterlockedSpinLockClass(this);
             this.variableClass = new Demo.VariableCapturingClass(this);
+            this.concurrentClass = new Demo.ConcurrentCollectionClass(this);
 
 
             this.Init();
@@ -403,8 +408,26 @@ namespace ParallelDemo
         #endregion
 
 
+        #region 线程安全的集合
 
+        [Tag("线程安全的集合-MSDN")]
+        private void Demo33()
+        {
+            this.concurrentClass.Demo1();
+        }
 
+        [Tag("线程安全的集合-限制容量")]
+        private void Demo34()
+        {
+            this.concurrentClass.Demo2();
+        }
+
+        [Tag("线程安全的集合-在BlockingCollection中使用Stack")]
+        private void Demo35()
+        {
+            this.concurrentClass.Demo3();
+        }
+        #endregion
 
 
 
